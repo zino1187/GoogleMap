@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>My First Google Map</h1>
+
+<div id="googleMap" style="width:100%;height:400px;"></div>
+
+<script>
+function myMap() {
+    var mapProp= {
+    center:new google.maps.LatLng(37.570674, 126.989079),
+    zoom:13,
+    };
+    var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+
+    //마커 추가하기
+    var pointArray = [
+        {lat:37.570674, lng:126.189177},
+        {lat:37.570674, lng:126.289288},
+        {lat:37.570674, lng:126.389399}
+    ] 
+    createIcon(map, pointArray);    
+}
+
+function createIcon(map, pointArray){   
+    //아이콘 사이즈 변경
+    var icon = {
+        url: './images/smile.png', // url
+        scaledSize: new google.maps.Size(50, 50), // scaled size
+        origin: new google.maps.Point(0,0), // origin
+        anchor: new google.maps.Point(0, 0) // anchor
+    };
+
+    for(var i=0;i<pointArray.length;i++){
+        var marker = new google.maps.Marker({
+            position:pointArray[i],
+            animation:google.maps.Animation.BOUNCE,
+            icon:icon,
+            map:map
+        });
+        marker.setMap(map);    
+    }
+}
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8VUERc0WGTj1jLJiwYF7c8ky3E8tXVlo&callback=myMap"></script>
+
+</body>
+</html>
