@@ -77,10 +77,12 @@ function connectServer(){
     webSocket.onmessage = function(e){
         var json = JSON.parse(e.data); //String -> json obj
         //console.log(e.data); //서버의 json데이터가 날아와야 함..   
-        createIcon([{lat:parseFloat(json.lat), lng:parseFloat(json.lng)}],
-        ["/images/smile1.png"] , 
-        [json.content]);
-
+        createIcon([
+            {
+                lat:parseFloat(json.lat), 
+                lng:parseFloat(json.lng)
+            }
+        ], ["/images/smile1.png"] , [json.content]);
     }
 }
 </script>

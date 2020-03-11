@@ -20,7 +20,8 @@ var app = express(); //express객체 생성
 //이 미들웨어 중 정적자원을 처리하는 static() 을 이용해본다!!
 console.log("웹사이트의 루트 경로 ",__dirname);
 app.use(express.static(__dirname));
-app.use(bodyParser.urlencoded({extended:false}));//미들웨어 추가!!
+app.use(express.urlencoded({extended:true})); //for form send
+app.use(express.json()); //for json 
 
 
 //클라이언트의 요청마다 그 요청을 처리할 로직을 작성..
@@ -29,9 +30,8 @@ app.post("/regist", function(request, response){
     //console.log("request.body" , request.body);
     //bodyParser에 의해 body로 전달된 파라미터를 인식하게
     //되었으므로, 사용해보자!! 
-    var lat = request.body.lat;
-    var lng = request.body.lng; 
-    var content = request.body.content;
+    console.log(request.body);
+    //console.log("lat:", lat, "lng:", lng, "content:",content);
 
     //입력 폼에서 전송된 파라미터를 , 맵브라우저들에게 전송 
     send(request.body);
@@ -62,6 +62,7 @@ socketServer.on("connection", function(socket){
 //출력 ( send)
 function send(data){
     console.log("맵에게 보낼 데이터는 ", data);
+    
     //접속한 모든 맵 브라우저에게 브로드케스팅하자!!
     for(var i=0;i<socketArray.length;i++){
         socketArray[i].send(JSON.stringify(data));
