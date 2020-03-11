@@ -9,13 +9,14 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
 var webSocket;
+var map;//모든 함수가 접근해야 하므로...
 
 function myMap() {
     var mapProp= {
     center:new google.maps.LatLng(37.570674, 126.989079),
     zoom:13,
     };
-    var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+    map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
 
     //마커 추가하기 
     var pointArray=[
@@ -23,18 +24,13 @@ function myMap() {
         {lat:37.570674, lng:126.689079},
         {lat:37.570674, lng:126.789079}
     ];    
-    createIcon(map, pointArray,[
-        "/images/smile1.png",
-        "/images/smile2.png",
-        "/images/smile3.png"] , 
-        ["<b>웃는 아이콘</b>","<a href='http://naver.com'>투명 아이콘</a>","<marquee>아픈 아이콘</marquee>"]);
     
         //맵이 완료된 시점에 웹소켓 서버와 연결을 완료해 놓자!!
         connectServer();
 }
 
 //아이콘 생성하기 !!
-function createIcon(map, pointArray, imgArray, contentArray){
+function createIcon(pointArray, imgArray, contentArray){
     for(var i=0;i<pointArray.length; i++){
         //보여질 아이콘을 제이슨 객체로 정의
         var icon = {
@@ -79,7 +75,12 @@ function connectServer(){
     }
     //서버에서 전송된 데이터 받기!!
     webSocket.onmessage = function(e){
-        console.log(e.data); //서버의 json데이터가 날아와야 함..        
+        var json = JSON.parse(e.data); //String -> json obj
+        //console.log(e.data); //서버의 json데이터가 날아와야 함..   
+        createIcon([{lat:parseFloat(json.lat), lng:parseFloat(json.lng)}],
+        ["/images/smile1.png"] , 
+        [json.content]);
+
     }
 }
 </script>
